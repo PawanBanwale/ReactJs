@@ -1,4 +1,4 @@
-import { useState,useCallback, useEffect } from 'react'
+import { useState,useCallback, useEffect, useRef } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 
@@ -28,6 +28,16 @@ function App() {
   useEffect(()=>{
     passGenerator()
   },[passGenerator])
+
+  // creating reference of input type password
+  const passReference = useRef(null)
+
+  const copyToClipboard = useCallback(()=>{
+    //for looks like password is copied
+    passReference.current?.select()
+    // to copy the password
+    window.navigator.clipboard.writeText(password)
+  },[password])
   return (
     <>
       <div className='w-full max-w-lg mx-auto shadow-md rounded-lg px-4 py-3 my-8 bg-gray-700'>
@@ -39,8 +49,9 @@ function App() {
             className='outline-none w-full py-1 px-3 bg-white'
             placeholder='password'
             readOnly
+            ref={passReference}
           />
-          <button className='outline-none bg-blue-700 text-white px-3 py-0.5 shrink-0'>Copy</button>
+          <button  onClick={copyToClipboard} className='outline-none bg-blue-700 hover:bg-blue-300 text-white px-3 py-0.5 shrink-0'>Copy</button>
        </div>
 
        <div className='flex text-sm gap-x-2 text-orange-600'>
@@ -54,7 +65,7 @@ function App() {
            onChange={(e)=>setLength(e.target.value)}
           />
           <label>Length: {length}</label>
-        </div>
+        </div> 
 
         <div className='flex items-centre gap-x-1'>
           <input 
